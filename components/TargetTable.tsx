@@ -22,23 +22,23 @@ export default function TargetTable({ targets, setTargets }: TargetTableProps) {
     setTargets(updatedTargets);
 
     // do with backend
-    const response = await fetch(`/api/targets`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id, newStatus }),
-    });
+    // const response = await fetch(`/api/targets`, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ id, newStatus }),
+    // });
 
-    if (response.ok) {
-      const updatedTargets = targets.map((target) =>
-        target.id === id ? { ...target, pipelineStatus: newStatus } : target
-      );
-      setTargets(updatedTargets);
-    } else {
-      const errorData = await response.json();
-      console.error("Failed to update status:", errorData.message);
-    }
+    // if (response.ok) {
+    //   const updatedTargets = targets.map((target) =>
+    //     target.id === id ? { ...target, pipelineStatus: newStatus } : target
+    //   );
+    //   setTargets(updatedTargets);
+    // } else {
+    //   const errorData = await response.json();
+    //   console.error("Failed to update status:", errorData.message);
+    // }
   };
 
   // Filter targets based on the search query

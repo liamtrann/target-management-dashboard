@@ -1,3 +1,34 @@
+## Prerequisites
+
+Before running this project, make sure you have the following installed on your machine:
+
+- **Node.js**: Version 18 or higher
+- **npm**: Installed with Node.js (should be at least version 8 or higher)
+
+You can check your Node.js and npm versions by running the following commands:
+
+```bash
+node -v
+npm -v
+```
+
+## Clone the repository:
+
+```bash
+git clone https://github.com/liamtrann/target-management-dashboard
+
+cd target-management-dashboard
+
+```
+
+## Installation:
+
+`npm install`
+
+## Run Application
+
+`npm run dev`
+
 # Add any notes about the task here
 
 ## Strategy to Manage and Track Changes to Pipeline Statuses
@@ -31,7 +62,9 @@ CREATE TABLE IF NOT EXISTS audit_log (
 ```
 
 ### Data Update Strategy:
+
 Whenever a target’s status is updated:
+
 1. Fetch the current `pipelineStatus` from the `targets` table.
 2. Compare the new status with the current one:
    - If different, proceed to update the status in the `targets` table.
@@ -43,18 +76,22 @@ The `audit_log` will accumulate entries for each status change, providing a full
 ## 2. Non-Trivial Edge Cases and Solutions:
 
 ### 1. Invalid Status:
+
 - **Problem**: The system may receive invalid pipeline statuses that are not part of the allowed values (e.g., 'Passed', 'Cold', 'Active', 'Hot', 'Closed').
 - **Solution**: Implement validation to check the new status against the allowed list before performing any updates. If the status is invalid, return an error message, ensuring that only correct statuses can be updated.
 
 ### 2. Concurrent Updates:
+
 - **Problem**: Multiple users or services might try to update the same target’s pipeline status at the same time, causing race conditions.
 - **Solution**: Implement database-level transactions or optimistic locking to ensure consistency. The `lastUpdated` field could be checked to ensure no recent changes occurred before applying the new status update.
 
 ### 3. Failed Database Connection:
+
 - **Problem**: If the database is temporarily unavailable, status updates may fail, and data may be lost.
 - **Solution**: Implement retry mechanisms in the application. Log any failed attempts to update the database so they can be retried or manually corrected when the database is back online.
 
 ### 4. Status Stagnation:
+
 - **Problem**: A target may remain in one status for too long without progress (e.g., staying in 'Active' indefinitely).
 - **Solution**: Implement a cron job or scheduled task to periodically check the age of the current status and notify users if a target has not moved for a certain period (e.g., 30 days).
 
